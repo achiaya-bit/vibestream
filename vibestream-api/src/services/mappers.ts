@@ -1,5 +1,5 @@
 import { formatDuration } from "../utils/format.js";
-import { publicUploadUrl } from "../utils/uploads.js";
+import { publicAudioUrl, publicCoverUrl } from "../utils/uploads.js";
 
 type SongRow = {
   id: string;
@@ -39,8 +39,8 @@ export function toSongDto(row: SongRow) {
     album: row.album,
     duration: formatDuration(row.durationSeconds),
     cover: row.cover,
-    coverUrl: publicUploadUrl(row.coverImagePath),
-    audioUrl: publicUploadUrl(row.audioPath),
+    coverUrl: publicCoverUrl(row.coverImagePath),
+    audioUrl: publicAudioUrl(row.audioPath),
     genre: row.genre,
     plays: row.plays,
     uploadedAt,

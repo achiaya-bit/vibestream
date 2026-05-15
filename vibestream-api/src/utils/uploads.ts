@@ -1,39 +1,34 @@
-import fs from "node:fs";
-import path from "node:path";
 import { config } from "../config.js";
+import { normalizeAudioKey, normalizeCoverKey } from "./storage-keys.js";
 
-export function ensureUploadDirs() {
-  for (const dir of [config.uploadDir, config.audioDir, config.coversDir]) {
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  }
+export function publicCoverUrl(storedKey: string | null | undefined): string | null {
+  if (!storedKey) return null;
+  const key = normalizeCoverKey(storedKey);
+  return `/uploads/covers/${encodeURIComponent(key)}`;
 }
 
-export function publicUploadUrl(relativePath: string | null | undefined) {
+export function publicAudioUrl(storedKey: string | null | undefined): string | null {
+  if (!storedKey) return null;
+  const key = normalizeAudioKey(storedKey);
+  return `/uploads/songs/${encodeURIComponent(key)}`;
+}
+
+/** @deprecated Use publicCoverUrl / publicAudioUrl */
+export function publicUploadUrl(relativePath: string | null | undefined): string | null {
   if (!relativePath) return null;
+  if (relativePath.startsWith("covers/") || relativePath.startsWith("covers\\")) {
+    return publicCoverUrl(relativePath);
+  }
+  if (relativePath.startsWith("audio/") || relativePath.startsWith("audio\\")) {
+    return publicAudioUrl(relativePath);
+  }
   return `/uploads/${relativePath.replace(/\\/g, "/")}`;
 }
 
-export function resolveUploadPath(relativePath: string) {
-  return path.join(config.uploadDir, relativePath);
+export function songsBucket(): string {
+  return config.minio.bucketSongs;
 }
 
-export function deleteUploadFile(relativePath: string | null | undefined) {
-  if (!relativePath) return;
-  const full = resolveUploadPath(relativePath);
-  if (fs.existsSync(full)) fs.unlinkSync(full);
-}
-
-export function dirSizeBytes(dir: string): number {
-  if (!fs.existsSync(dir)) return 0;
-  let total = 0;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) total += dirSizeBytes(full);
-    else total += fs.statSync(full).size;
-  }
-  return total;
-}
-
-export function uploadsStorageBytes() {
-  return dirSizeBytes(config.uploadDir);
+export function coversBucket(): string {
+  return config.minio.bucketCovers;
 }

@@ -1,7 +1,7 @@
 import "dotenv/config";
-import { defineConfig } from "drizzle-kit";
+import { defineConfig, type Config } from "drizzle-kit";
 
-function databaseUrl() {
+function databaseUrl(): string {
   if (process.env.DATABASE_URL?.trim()) return process.env.DATABASE_URL.trim();
   const user = encodeURIComponent(process.env.DB_USER ?? "vibestream");
   const password = encodeURIComponent(process.env.DB_PASSWORD ?? "vibestream");
@@ -11,9 +11,11 @@ function databaseUrl() {
   return `postgresql://${user}:${password}@${host}:${port}/${name}`;
 }
 
-export default defineConfig({
+const drizzleConfig = {
   schema: "./src/db/schema.ts",
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: { url: databaseUrl() },
-});
+} satisfies Config;
+
+export default defineConfig(drizzleConfig);

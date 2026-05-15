@@ -29,7 +29,13 @@ export function Cover({
         <img src={coverUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
         <>
-          <div className={cn("absolute inset-0 bg-gradient-to-br", gradient, animated && "animate-gradient-x")} />
+          <div
+            className={cn(
+              "absolute inset-0 bg-gradient-to-br",
+              gradient,
+              animated && "animate-gradient-x",
+            )}
+          />
           <div
             className="absolute inset-0 mix-blend-overlay opacity-40"
             style={{
@@ -37,7 +43,10 @@ export function Cover({
                 "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.4), transparent 40%), radial-gradient(circle at 70% 80%, rgba(0,0,0,0.4), transparent 40%)",
             }}
           />
-          <Music2 className="absolute inset-0 m-auto text-white/30" size={size === "xs" || size === "sm" ? 18 : 48} />
+          <Music2
+            className="absolute inset-0 m-auto text-white/30"
+            size={size === "xs" || size === "sm" ? 18 : 48}
+          />
         </>
       )}
     </div>

@@ -39,7 +39,7 @@ export function Sidebar() {
               "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition",
               is(m.to)
                 ? "bg-white/10 text-foreground shadow-glow-cyan"
-                : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5",
             )}
           >
             <m.icon size={18} />
@@ -51,7 +51,9 @@ export function Sidebar() {
       <div className="h-px bg-white/5" />
 
       <div className="flex items-center justify-between px-3">
-        <span className="text-xs uppercase tracking-wider text-muted-foreground">Your Playlists</span>
+        <span className="text-xs uppercase tracking-wider text-muted-foreground">
+          Your Playlists
+        </span>
         <button className="text-muted-foreground hover:text-foreground" aria-label="New playlist">
           <Plus size={16} />
         </button>
@@ -86,7 +88,7 @@ export function Sidebar() {
               "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition",
               is(m.to)
                 ? "bg-white/10 text-foreground"
-                : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5",
             )}
           >
             <m.icon size={18} />

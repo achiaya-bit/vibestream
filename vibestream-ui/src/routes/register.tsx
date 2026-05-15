@@ -38,21 +38,41 @@ function Register() {
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <FloatingInput icon={User} label="Full name" value={name} onChange={setName} />
         <FloatingInput icon={Mail} label="Email" type="email" value={email} onChange={setEmail} />
-        <FloatingInput icon={Lock} label="Password" type={show ? "text" : "password"} value={password} onChange={setPassword} suffix={
-          <button type="button" onClick={() => setShow((s) => !s)} className="text-muted-foreground hover:text-foreground" aria-label="Toggle password">
-            {show ? <EyeOff size={16} /> : <Eye size={16} />}
-          </button>
-        } />
-        <p className="text-xs text-muted-foreground">By continuing you agree to our Terms and Privacy Policy.</p>
+        <FloatingInput
+          icon={Lock}
+          label="Password"
+          type={show ? "text" : "password"}
+          value={password}
+          onChange={setPassword}
+          suffix={
+            <button
+              type="button"
+              onClick={() => setShow((s) => !s)}
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="Toggle password"
+            >
+              {show ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          }
+        />
+        <p className="text-xs text-muted-foreground">
+          By continuing you agree to our Terms and Privacy Policy.
+        </p>
         {error && <p className="text-sm text-red-400">{error}</p>}
-        <button disabled={loading} className="h-12 rounded-xl bg-gradient-hero shadow-glow font-semibold mt-2 hover:scale-[1.01] transition disabled:opacity-60">
+        <button
+          disabled={loading}
+          className="h-12 rounded-xl bg-gradient-hero shadow-glow font-semibold mt-2 hover:scale-[1.01] transition disabled:opacity-60"
+        >
           {loading ? "Creating…" : "Create account"}
         </button>
       </form>
       <Divider />
       <SocialRow />
       <p className="text-center text-sm text-muted-foreground mt-6">
-        Already have an account? <Link to="/login" className="text-[var(--neon-cyan)] hover:underline">Sign in</Link>
+        Already have an account?{" "}
+        <Link to="/login" className="text-[var(--neon-cyan)] hover:underline">
+          Sign in
+        </Link>
       </p>
     </AuthShell>
   );

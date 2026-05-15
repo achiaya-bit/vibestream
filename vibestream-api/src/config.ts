@@ -1,7 +1,4 @@
 import "dotenv/config";
-import path from "node:path";
-
-const uploadRoot = path.resolve(process.env.UPLOAD_DIR ?? "./uploads");
 
 function buildDatabaseUrl(): string {
   if (process.env.DATABASE_URL?.trim()) {
@@ -17,6 +14,13 @@ function buildDatabaseUrl(): string {
   return `postgresql://${user}:${password}@${host}:${port}/${name}`;
 }
 
+function buildMinioUrl(): string {
+  const useSsl = process.env.MINIO_USE_SSL === "true";
+  const host = process.env.MINIO_ENDPOINT ?? "localhost";
+  const port = process.env.MINIO_PORT ?? "9000";
+  return `${useSsl ? "https" : "http"}://${host}:${port}`;
+}
+
 export const config = {
   port: Number(process.env.PORT ?? 3001),
   databaseUrl: buildDatabaseUrl(),
@@ -29,9 +33,15 @@ export const config = {
   },
   jwtSecret: process.env.JWT_SECRET ?? "vibestream-dev-secret",
   corsOrigin: (process.env.CORS_ORIGIN ?? "http://localhost:8080,http://localhost:5173,http://127.0.0.1:5173").split(","),
-  uploadDir: uploadRoot,
-  audioDir: path.join(uploadRoot, "audio"),
-  coversDir: path.join(uploadRoot, "covers"),
+  minio: {
+    endpoint: process.env.MINIO_ENDPOINT ?? "localhost",
+    port: Number(process.env.MINIO_PORT ?? 9000),
+    url: buildMinioUrl(),
+    accessKey: process.env.MINIO_ACCESS_KEY ?? "minioadmin",
+    secretKey: process.env.MINIO_SECRET_KEY ?? "minioadmin",
+    bucketSongs: process.env.MINIO_BUCKET_SONGS ?? "songs",
+    bucketCovers: process.env.MINIO_BUCKET_COVERS ?? "covers",
+  },
   maxAudioBytes: 50 * 1024 * 1024,
   maxCoverBytes: 5 * 1024 * 1024,
 };

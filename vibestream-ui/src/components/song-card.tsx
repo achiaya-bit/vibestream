@@ -20,15 +20,23 @@ export function SongCard({ song, queue }: { song: Song; queue?: Song[] }) {
       <div className="relative">
         <Cover gradient={song.cover} coverUrl={song.coverUrl} size="full" />
         <button
-          onClick={(e) => { e.preventDefault(); active ? toggle() : play(song, queue); }}
+          onClick={(e) => {
+            e.preventDefault();
+            if (active) toggle();
+            else play(song, queue);
+          }}
           className={cn(
             "absolute bottom-3 right-3 h-12 w-12 rounded-full bg-gradient-hero shadow-glow grid place-items-center",
             "opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300",
-            active && "opacity-100 translate-y-0"
+            active && "opacity-100 translate-y-0",
           )}
           aria-label={active && isPlaying ? "Pause" : "Play"}
         >
-          {active && isPlaying ? <Pause size={20} className="text-white" /> : <Play size={20} className="text-white ml-0.5" fill="white" />}
+          {active && isPlaying ? (
+            <Pause size={20} className="text-white" />
+          ) : (
+            <Play size={20} className="text-white ml-0.5" fill="white" />
+          )}
         </button>
       </div>
       <div className="mt-4 flex items-start justify-between gap-2">
@@ -44,7 +52,10 @@ export function SongCard({ song, queue }: { song: Song; queue?: Song[] }) {
           </Link>
         </div>
         <button
-          onClick={(e) => { e.preventDefault(); toggleLike(song.id); }}
+          onClick={(e) => {
+            e.preventDefault();
+            toggleLike(song.id);
+          }}
           className="shrink-0 text-muted-foreground hover:text-neon-pink transition"
           aria-label="Like"
         >

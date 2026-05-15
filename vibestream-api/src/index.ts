@@ -1,9 +1,7 @@
 import { createApp } from "./app.js";
 import { config } from "./config.js";
 import { closeDb, verifyDbConnection } from "./db/index.js";
-import { ensureUploadDirs } from "./utils/uploads.js";
-
-ensureUploadDirs();
+import { ensureMinioBucketsWithRetry } from "./storage/minio.js";
 
 const app = createApp();
 
@@ -17,6 +15,18 @@ async function start() {
     console.error(err);
     console.error("\nStart Postgres: docker compose up -d postgres");
     console.error("Then run: npm run db:setup\n");
+    process.exit(1);
+  }
+
+  try {
+    await ensureMinioBucketsWithRetry();
+    console.log(`MinIO connected (${config.minio.url}).`);
+    console.log(`  Buckets: ${config.minio.bucketSongs}, ${config.minio.bucketCovers}`);
+  } catch (err) {
+    console.error("Failed to connect to MinIO.");
+    console.error(`Endpoint: ${config.minio.url}`);
+    console.error(err);
+    console.error("\nStart MinIO: docker compose up -d minio\n");
     process.exit(1);
   }
 

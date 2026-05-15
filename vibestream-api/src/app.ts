@@ -2,16 +2,15 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
 import { config } from "./config.js";
-import { ensureUploadDirs } from "./utils/uploads.js";
 import { errorHandler } from "./middleware/error.js";
 import adminRouter from "./routes/admin.js";
 import artistsRouter from "./routes/artists.js";
 import authRouter from "./routes/auth.js";
+import mediaRouter from "./routes/media.js";
 import playlistsRouter from "./routes/playlists.js";
 import songsRouter from "./routes/songs.js";
 
 export function createApp() {
-  ensureUploadDirs();
   const app = express();
 
   app.use(
@@ -22,7 +21,7 @@ export function createApp() {
   );
   app.use(cookieParser());
   app.use(express.json());
-  app.use("/uploads", express.static(config.uploadDir));
+  app.use("/uploads", mediaRouter);
 
   app.get("/health", (_req, res) => res.json({ status: "ok" }));
 

@@ -73,7 +73,9 @@ function DropZone({
       }}
       className={cn(
         "relative rounded-2xl border-2 border-dashed p-5 text-center transition cursor-pointer",
-        dragOver ? "border-[var(--neon-cyan)] bg-[var(--neon-cyan)]/10" : "border-white/15 hover:border-white/30 hover:bg-white/5",
+        dragOver
+          ? "border-[var(--neon-cyan)] bg-[var(--neon-cyan)]/10"
+          : "border-white/15 hover:border-white/30 hover:bg-white/5",
         file && "border-[var(--neon-purple)]/50 bg-white/5",
       )}
     >
@@ -311,11 +313,13 @@ export function UploadMusicDialog({ open, onOpenChange, artists }: Props) {
               className="h-11 px-4 rounded-xl bg-white/5 border border-white/10 focus:border-[var(--neon-cyan)] focus:outline-none text-sm"
               disabled={status === "uploading"}
             >
-              {genres.filter((g) => g !== "All").map((g) => (
-                <option key={g} value={g}>
-                  {g}
-                </option>
-              ))}
+              {genres
+                .filter((g) => g !== "All")
+                .map((g) => (
+                  <option key={g} value={g}>
+                    {g}
+                  </option>
+                ))}
             </select>
           </div>
 

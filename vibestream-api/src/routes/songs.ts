@@ -1,12 +1,13 @@
-import fs from "node:fs";
-import path from "node:path";
 import { Router } from "express";
 import { and, asc, eq, ilike, or, sql } from "drizzle-orm";
+import { pipeline } from "node:stream/promises";
 import { db, schema } from "../db/index.js";
-import { resolveUploadPath } from "../utils/uploads.js";
+import { getObjectStream } from "../storage/minio.js";
+import { toSongDto } from "../services/mappers.js";
+import { songsBucket } from "../utils/uploads.js";
+import { normalizeAudioKey } from "../utils/storage-keys.js";
 
 const { artists, songs } = schema;
-import { toSongDto } from "../services/mappers.js";
 
 const router = Router();
 
@@ -68,29 +69,29 @@ router.get("/:id/stream", async (req, res, next) => {
       .where(eq(songs.id, row.song.id));
 
     if (row.song.audioPath) {
-      const filePath = resolveUploadPath(row.song.audioPath);
-      if (fs.existsSync(filePath)) {
-        const stat = fs.statSync(filePath);
-        const range = req.headers.range;
-        if (range) {
-          const parts = range.replace(/bytes=/, "").split("-");
-          const start = parseInt(parts[0], 10);
-          const end = parts[1] ? parseInt(parts[1], 10) : stat.size - 1;
-          res.writeHead(206, {
-            "Content-Range": `bytes ${start}-${end}/${stat.size}`,
-            "Accept-Ranges": "bytes",
-            "Content-Length": end - start + 1,
-            "Content-Type": "audio/mpeg",
-          });
-          return fs.createReadStream(filePath, { start, end }).pipe(res);
-        }
-        res.setHeader("Content-Type", "audio/mpeg");
-        res.setHeader("Content-Length", stat.size);
-        return fs.createReadStream(filePath).pipe(res);
+      const key = normalizeAudioKey(row.song.audioPath);
+      const range = typeof req.headers.range === "string" ? req.headers.range : undefined;
+
+      try {
+        const { body, contentType, contentLength, contentRange, statusCode } = await getObjectStream(
+          songsBucket(),
+          key,
+          range,
+        );
+
+        res.status(statusCode);
+        res.setHeader("Content-Type", contentType ?? "audio/mpeg");
+        res.setHeader("Accept-Ranges", "bytes");
+        if (contentLength !== undefined) res.setHeader("Content-Length", contentLength);
+        if (contentRange) res.setHeader("Content-Range", contentRange);
+
+        await pipeline(body, res);
+        return;
+      } catch {
+        /* fall through to demo stream */
       }
     }
 
-    // Demo fallback when no uploaded audio file exists yet
     res.redirect(302, "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
   } catch (e) {
     next(e);

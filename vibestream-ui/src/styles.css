@@ -49,28 +49,60 @@
   --animate-fade-up: fade-up 0.6s ease-out;
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
   }
   @keyframes glow {
-    0%, 100% { opacity: 0.6; filter: blur(40px); }
-    50% { opacity: 1; filter: blur(50px); }
+    0%,
+    100% {
+      opacity: 0.6;
+      filter: blur(40px);
+    }
+    50% {
+      opacity: 1;
+      filter: blur(50px);
+    }
   }
   @keyframes equalizer {
-    0%, 100% { transform: scaleY(0.4); }
-    50% { transform: scaleY(1); }
+    0%,
+    100% {
+      transform: scaleY(0.4);
+    }
+    50% {
+      transform: scaleY(1);
+    }
   }
   @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
   @keyframes fade-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -104,10 +136,15 @@
   --neon-pink: oklch(0.72 0.25 340);
 
   --gradient-hero: linear-gradient(135deg, oklch(0.68 0.27 295) 0%, oklch(0.82 0.18 200) 100%);
-  --gradient-surface: linear-gradient(135deg, oklch(0.2 0.04 285 / 0.8), oklch(0.16 0.03 280 / 0.6));
-  --gradient-mesh: radial-gradient(at 20% 20%, oklch(0.68 0.27 295 / 0.35) 0, transparent 50%),
-                   radial-gradient(at 80% 30%, oklch(0.82 0.18 200 / 0.25) 0, transparent 50%),
-                   radial-gradient(at 50% 90%, oklch(0.72 0.25 340 / 0.2) 0, transparent 50%);
+  --gradient-surface: linear-gradient(
+    135deg,
+    oklch(0.2 0.04 285 / 0.8),
+    oklch(0.16 0.03 280 / 0.6)
+  );
+  --gradient-mesh:
+    radial-gradient(at 20% 20%, oklch(0.68 0.27 295 / 0.35) 0, transparent 50%),
+    radial-gradient(at 80% 30%, oklch(0.82 0.18 200 / 0.25) 0, transparent 50%),
+    radial-gradient(at 50% 90%, oklch(0.72 0.25 340 / 0.2) 0, transparent 50%);
 
   --shadow-glow: 0 0 40px oklch(0.68 0.27 295 / 0.4);
   --shadow-glow-cyan: 0 0 40px oklch(0.82 0.18 200 / 0.35);
@@ -115,8 +152,12 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html { color-scheme: dark; }
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    color-scheme: dark;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -125,7 +166,14 @@
     background-attachment: fixed;
     min-height: 100vh;
   }
-  h1, h2, h3, h4, h5 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
 }
 
 @layer utilities {
@@ -147,20 +195,38 @@
     background-clip: text;
     color: transparent;
   }
-  .bg-gradient-hero { background: var(--gradient-hero); }
-  .bg-gradient-mesh { background: var(--gradient-mesh); }
-  .shadow-glow { box-shadow: var(--shadow-glow); }
-  .shadow-glow-cyan { box-shadow: var(--shadow-glow-cyan); }
-  .shadow-elevated { box-shadow: var(--shadow-elevated); }
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .bg-gradient-mesh {
+    background: var(--gradient-mesh);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .shadow-glow-cyan {
+    box-shadow: var(--shadow-glow-cyan);
+  }
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
   .neon-border {
     border: 1px solid transparent;
     background:
       linear-gradient(var(--surface), var(--surface)) padding-box,
       var(--gradient-hero) border-box;
   }
-  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: oklch(0.3 0.04 285); border-radius: 3px; }
-  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: oklch(0.3 0.04 285);
+    border-radius: 3px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
   .animate-gradient-x {
     background-size: 200% 200%;
     animation: var(--animate-gradient);
